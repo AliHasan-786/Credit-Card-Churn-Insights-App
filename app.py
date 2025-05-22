@@ -76,13 +76,13 @@ st.markdown(f"""
     }}
     .stButton>button:hover {{
         background-color: #b02020; /* Darker red for hover */
-    }
-    .footer {
+    }} 
+    .footer {{
         text-align: center;
         margin-top: 3rem;
         color: #666;
         font-size: 0.8rem;
-    }
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -500,190 +500,149 @@ elif selected_page == "AI Insights":
     st.markdown("<h1 class='main-header'>AI-Powered Insights</h1>", unsafe_allow_html=True)
     
     st.markdown("""
-    This section demonstrates how artificial intelligence can generate strategic insights and personalized retention strategies
-    based on the churn prediction model. Click the button below to generate AI-powered insights.
+    This section demonstrates how artificial intelligence can generate strategic insights and personalized retention strategies.
+    Configure the customer profile below and click the button to generate AI-powered insights.
     """)
+
+    st.markdown("<h3 class='section-header'>Customer Profile Configuration</h3>", unsafe_allow_html=True)
     
-    # Generate insights button
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        generate_button = st.button("Generate AI-Powered Insights", use_container_width=True)
+    # Define options for selectboxes
+    age_options = [25, 30, 35, 40, 45, 50, 55, 60, 65]
+    gender_options = ["Female", "Male"]
+    
+    income_options_all = list(df['Income_Category'].unique())
+    if 'Unknown' in income_options_all:
+        income_options = [opt for opt in income_options_all if opt != 'Unknown'] + ['Unknown']
+    else:
+        income_options = income_options_all
+    default_income_val = "$80K - $120K"
+    if default_income_val not in income_options: default_income_val = income_options[0]
+    
+    card_type_options_all = list(df['Card_Category'].unique())
+    if 'Unknown' in card_type_options_all:
+        card_type_options = [opt for opt in card_type_options_all if opt != 'Unknown'] + ['Unknown']
+    else:
+        card_type_options = card_type_options_all
+    default_card_type_val = "Blue"
+    if default_card_type_val not in card_type_options: default_card_type_val = card_type_options[0]
+
+    tenure_options = ["6 months", "12 months", "24 months", "36 months", "48 months", "60 months", "72 months"]
+    products_options = [1, 2, 3, 4, 5, 6]
+    inactive_months_options = [0, 1, 2, 3, 4, 5, 6]
+    contacts_options = [0, 1, 2, 3, 4, 5, 6]
+    credit_limit_options = [1500, 3000, 5000, 7500, 10000, 12000, 15000, 20000, 25000, 30000, 35000] # Numeric for easier processing if needed
+    revolving_balance_options = [0, 500, 1000, 1500, 2000, 2500] # Numeric
+    utilization_options = [0.0, 0.1, 0.125, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] # Numeric
+    transaction_amount_options = [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000, 15000] # Numeric
+    transaction_count_options = [10, 20, 30, 40, 45, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+
+
+    profile_input_cols = st.columns(3)
+    with profile_input_cols[0]:
+        selected_age = st.selectbox("Age", options=age_options, index=age_options.index(45))
+        selected_gender = st.selectbox("Gender", options=gender_options, index=gender_options.index("Female"))
+        selected_income = st.selectbox("Income", options=income_options, index=income_options.index(default_income_val))
+        selected_card_type = st.selectbox("Card Type", options=card_type_options, index=card_type_options.index(default_card_type_val))
+    with profile_input_cols[1]:
+        selected_tenure = st.selectbox("Tenure (Months on Book)", options=tenure_options, index=tenure_options.index("36 months")) # Kept as string
+        selected_products = st.selectbox("Products Held (Relationship Count)", options=products_options, index=products_options.index(2))
+        selected_inactive_months = st.selectbox("Inactive Months (Last 12)", options=inactive_months_options, index=inactive_months_options.index(3))
+        selected_contacts = st.selectbox("Contacts (Last 12)", options=contacts_options, index=contacts_options.index(4))
+    with profile_input_cols[2]:
+        selected_credit_limit = st.selectbox("Credit Limit ($)", options=credit_limit_options, index=credit_limit_options.index(12000))
+        selected_revolving_balance = st.selectbox("Revolving Balance ($)", options=revolving_balance_options, index=revolving_balance_options.index(1500))
+        selected_utilization = st.selectbox("Utilization Ratio", options=utilization_options, format_func=lambda x: f"{x:.1%}", index=utilization_options.index(0.125))
+        selected_transaction_amount = st.selectbox("Transaction Amount (Last 12m, $)", options=transaction_amount_options, index=transaction_amount_options.index(2500))
+        selected_transaction_count = st.selectbox("Transaction Count (Last 12m)", options=transaction_count_options, index=transaction_count_options.index(45))
+
+    button_col1, button_col2, button_col3 = st.columns([1,1.5,1]) 
+    with button_col2:
+        generate_button = st.button("🚀 Generate AI-Powered Insights for Selected Profile", use_container_width=True)
     
     if generate_button:
-        with st.spinner("Generating insights..."):
-            # Simulate loading time
+        selected_profile_dict = {
+            "Age": selected_age, "Gender": selected_gender, "Income": selected_income,
+            "Card Type": selected_card_type, "Tenure": selected_tenure, "Products": selected_products,
+            "Inactive Months": selected_inactive_months, "Contacts": selected_contacts,
+            "Credit Limit": selected_credit_limit, "Revolving Balance": selected_revolving_balance,
+            "Utilization": f"{selected_utilization:.1%}", # Format utilization back to string for display
+            "Transaction Amount": selected_transaction_amount,
+            "Transaction Count": selected_transaction_count
+        }
+
+        with st.spinner("🧠 Generating insights based on selected profile..."):
             import time
-            time.sleep(1)
+            time.sleep(1.5) 
         
-        st.success("Insights generated successfully!")
+        st.success("✨ Insights generated successfully for the selected profile!")
         
-        # Strategic recommendations
-        st.markdown("<h2 class='sub-header'>Strategic Recommendations</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 class='sub-header'>Personalized Retention Insights</h2>", unsafe_allow_html=True)
         
-        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
-        st.markdown("""
-        ### 1. Enhance Transaction Engagement Programs
+        insights_display_cols = st.columns(2) 
         
-        **Finding**: Low transaction count is the strongest predictor of churn. Customers with fewer than 30 transactions per quarter are 3.2x more likely to close their accounts.
-        
-        **Recommendation**: Implement a tiered rewards program that provides escalating benefits based on transaction frequency. Consider:
-        - Early-month activation bonuses for the first 5 transactions
-        - Mid-month milestone rewards at 15 transactions
-        - End-month achievement bonuses for reaching 30+ transactions
-        
-        **Expected Impact**: 15-20% reduction in churn among low-activity customers, translating to approximately $3.2M in retained annual revenue.
-        """)
-        st.markdown("</div>", unsafe_allow_html=True)
-        
-        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
-        st.markdown("""
-        ### 2. Optimize Revolving Balance Management
-        
-        **Finding**: Customers with very low revolving balances (utilization < 5%) or very high balances (utilization > 60%) have elevated churn rates.
-        
-        **Recommendation**: Develop targeted interventions based on utilization patterns:
-        - For low-utilization customers: Offer 0% APR on purchases for 6 months to encourage spending
-        - For high-utilization customers: Provide balance transfer offers and personalized debt management tools
-        
-        **Expected Impact**: 10-12% reduction in churn among these segments, with potential to increase average revolving balances by 8-10% among low-utilization customers.
-        """)
-        st.markdown("</div>", unsafe_allow_html=True)
-        
-        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
-        st.markdown("""
-        ### 3. Strengthen Multi-Product Relationships
-        
-        **Finding**: Customers with only 1-2 products have a 2.8x higher churn rate than those with 4+ products.
-        
-        **Recommendation**: Create a relationship-based product bundling strategy:
-        - Identify complementary products based on customer segments
-        - Offer significant incentives for adding a second or third product
-        - Develop a unified dashboard showing the combined benefits of multiple products
-        
-        **Expected Impact**: 18-22% reduction in single-product customer churn and 25-30% increase in product cross-sell rates.
-        """)
-        st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Personalized retention strategy
-        st.markdown("<h2 class='sub-header'>Personalized Retention Strategy Example</h2>", unsafe_allow_html=True)
-        
-        col1, col2 = st.columns([1, 2])
-        
-        with col1:
-            st.markdown("<h3 class='section-header'>Customer Profile</h3>", unsafe_allow_html=True)
+        with insights_display_cols[0]:
+            st.markdown("<h3 class='section-header'>Profile Snapshot & Churn Risk</h3>", unsafe_allow_html=True)
             
-            profile = {
-                "Age": 45,
-                "Gender": "Female",
-                "Income": "$80K - $120K",
-                "Card Type": "Blue",
-                "Tenure": "36 months",
-                "Products": 2,
-                "Inactive Months": 3,
-                "Contacts": 4,
-                "Credit Limit": "$12,000",
-                "Revolving Balance": "$1,500",
-                "Utilization": "12.5%",
-                "Transaction Amount": "$2,500",
-                "Transaction Count": 45
-            }
-            
-            for key, value in profile.items():
-                st.markdown(f"**{key}:** {value}")
-            
-            # Churn probability gauge
-            fig = go.Figure(go.Indicator(
-                mode = "gauge+number",
-                value = 75,
-                title = {'text': "Churn Probability"},
-                gauge = {
-                    'axis': {'range': [0, 100]},
-                    'bar': {'color': APP_COLORS['secondary']},
+            fig_gauge = go.Figure(go.Indicator(
+                mode = "gauge+number", value = 75, title = {'text': "Estimated Churn Probability"},
+                gauge = {{
+                    'axis': {{'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"}},
+                    'bar': {{'color': APP_COLORS['secondary']}}, 'bgcolor': "white", 'borderwidth': 2, 'bordercolor': "gray",
                     'steps': [
-                        {'range': [0, 30], 'color': APP_COLORS['accent3']},
-                        {'range': [30, 70], 'color': APP_COLORS['accent2']},
-                        {'range': [70, 100], 'color': APP_COLORS['secondary']}
+                        {{'range': [0, 30], 'color': APP_COLORS['accent3']}},
+                        {{'range': [30, 70], 'color': APP_COLORS['accent2']}},
                     ],
-                    'threshold': {
-                        'line': {'color': "red", 'width': 4},
-                        'thickness': 0.75,
-                        'value': 75
-                    }
-                }
+                    'threshold': {{'line': {{'color': "red", 'width': 4}}, 'thickness': 0.85, 'value': 75}}
+                }}
             ))
-            fig.update_layout(height=250, margin=dict(l=20, r=20, t=40, b=20), title_font_size=16)
-            st.plotly_chart(fig, use_container_width=True)
+            fig_gauge.update_layout(height=280, margin=dict(l=30,r=30,t=70,b=30), title_font_size=18, font=dict(color=APP_COLORS['primary']))
+            st.plotly_chart(fig_gauge, use_container_width=True)
+
+            st.markdown("#### Selected Profile Details:")
+            profile_details_md = "".join([f"- **{key}:** {value}\n" for key, value in selected_profile_dict.items()])
+            st.markdown(profile_details_md)
+
+        with insights_display_cols[1]:
+            st.markdown("<h3 class='section-header'>Tailored Retention Plan</h3>", unsafe_allow_html=True)
+            plan_text = f"""
+            <div class='insight-box' style='font-size: 0.9rem; height: 450px; overflow-y: auto; padding: 10px;'>
+            <p><strong>Risk Assessment for Profile (Age: {selected_profile_dict['Age']}, Income: {selected_profile_dict['Income']}, Products: {selected_profile_dict['Products']}):</strong></p>
+            <p>This customer profile may present warning signs of potential attrition. Factors like <strong>{selected_profile_dict['Inactive Months']} inactive months</strong> combined with <strong>{selected_profile_dict['Contacts']} customer service contacts</strong> can suggest growing dissatisfaction. 
+            A limited product relationship (<strong>{selected_profile_dict['Products']} products</strong>) or high credit utilization (<strong>{selected_profile_dict['Utilization']}</strong>) might also contribute to lower engagement.</p>
+            <p><strong>Recommended Interventions (Example):</strong></p>
+            <ol>
+                <li><strong>Proactive Outreach:</strong> If {selected_profile_dict['Contacts']} > 2, schedule a call from a relationship manager to address potential issues.</li>
+                <li><strong>Loyalty Offer for Card Type '{selected_profile_dict['Card Type']}':</strong> If Tenure is '{selected_profile_dict['Tenure']}', consider a loyalty bonus or a complementary service.</li>
+                <li><strong>Engagement Boost:</strong> If {selected_profile_dict['Inactive Months']} >= 3 or {selected_profile_dict['Transaction Count']} < 50 (currently {selected_profile_dict['Transaction Count']}), provide incentives like bonus points for the next few transactions.</li>
+                <li><strong>Financial Health Check:</strong> If Income is in a higher bracket (e.g., '$80K - $120K', 'More than $120K') and Churn Probability is high, offer a complimentary session with a financial advisor.</li>
+            </ol>
+            <p><strong>Expected Impact:</strong> This personalized strategy aims to improve retention by addressing specific risk factors for this profile.</p>
+            </div>"""
+            st.markdown(plan_text, unsafe_allow_html=True)
         
-        with col2:
-            st.markdown("<h3 class='section-header'>Personalized Retention Plan</h3>", unsafe_allow_html=True)
-            
-            st.markdown("""
-            #### Why This Customer Is At Risk
-            
-            This high-income female customer shows several warning signs of potential attrition. Despite having a healthy transaction count, her recent increase in inactive months (3) combined with multiple customer service contacts (4) suggests growing dissatisfaction. Her limited product relationship (only 2 products) provides insufficient stickiness to overcome potential frustrations.
-            
-            #### Recommended Interventions
-            
-            1. **Relationship Manager Outreach** (Priority: High)
-               - Schedule a personal call from a dedicated relationship manager within 48 hours
-               - Address recent service issues identified in contact logs
-               - Timing: Immediate
-               - Channel: Phone call followed by personalized email
-            
-            2. **Premium Card Upgrade Offer** (Priority: Medium)
-               - Offer upgrade from Blue to Platinum with first-year fee waiver
-               - Highlight premium benefits aligned with her spending patterns
-               - Timing: During relationship manager call
-               - Channel: Phone with digital follow-up showing benefit comparison
-            
-            3. **Customized Rewards Acceleration** (Priority: Medium)
-               - Provide 3-month 3x points multiplier in her top spending categories
-               - Create personalized spending dashboard highlighting rewards potential
-               - Timing: Implement within 7 days
-               - Channel: Mobile app notification and email
-            
-            4. **Financial Advisory Service** (Priority: Low)
-               - Offer complimentary session with a financial advisor.
-               - Focus on long-term wealth management aligned with her income bracket
-               - Timing: 2 weeks after initial interventions
-               - Channel: Email invitation with calendar scheduling link
-            
-            #### Expected Impact
-            
-            This personalized intervention strategy has an estimated 65% chance of retention, potentially preserving $4,200 in annual revenue from this customer. If successful, it also creates opportunities to deepen the relationship through additional product adoption, potentially increasing customer lifetime value by 2.3x.
-            """)
+        st.markdown("<h2 class='sub-header'>General Strategic Recommendations</h2>", unsafe_allow_html=True)
+        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
+        st.markdown("### 1. Enhance Transaction Engagement Programs\n**Finding**: Low transaction count is the strongest predictor of churn. Customers with fewer than 30 transactions per quarter are 3.2x more likely to close their accounts.\n**Recommendation**: Implement a tiered rewards program that provides escalating benefits based on transaction frequency. Consider: Early-month activation bonuses for the first 5 transactions, Mid-month milestone rewards at 15 transactions, End-month achievement bonuses for reaching 30+ transactions.\n**Expected Impact**: 15-20% reduction in churn among low-activity customers, translating to approximately $3.2M in retained annual revenue.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
+        st.markdown("### 2. Optimize Revolving Balance Management\n**Finding**: Customers with very low revolving balances (utilization < 5%) or very high balances (utilization > 60%) have elevated churn rates.\n**Recommendation**: Develop targeted interventions based on utilization patterns: For low-utilization customers: Offer 0% APR on purchases for 6 months to encourage spending. For high-utilization customers: Provide balance transfer offers and personalized debt management tools.\n**Expected Impact**: 10-12% reduction in churn among these segments, with potential to increase average revolving balances by 8-10% among low-utilization customers.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
+        st.markdown("### 3. Strengthen Multi-Product Relationships\n**Finding**: Customers with only 1-2 products have a 2.8x higher churn rate than those with 4+ products.\n**Recommendation**: Create a relationship-based product bundling strategy: Identify complementary products based on customer segments, Offer significant incentives for adding a second or third product, Develop a unified dashboard showing the combined benefits of multiple products.\n**Expected Impact**: 18-22% reduction in single-product customer churn and 25-30% increase in product cross-sell rates.")
+        st.markdown("</div>", unsafe_allow_html=True)
         
-        # Feature importance visualization
-        st.markdown("<h2 class='sub-header'>Key Churn Drivers</h2>", unsafe_allow_html=True)
-        
-        # Simulated feature importance data
-        feature_importance = pd.DataFrame({
-            'Feature': [
-                'Total_Trans_Ct', 
-                'Total_Revolving_Bal', 
-                'Total_Relationship_Count',
-                'Months_Inactive_12_mon',
-                'Contacts_Count_12_mon',
-                'Total_Trans_Amt',
-                'Avg_Utilization_Ratio',
-                'Months_on_book',
-                'Credit_Limit',
-                'Customer_Age'
-            ],
+        st.markdown("<h2 class='sub-header'>Key Churn Drivers (General)</h2>", unsafe_allow_html=True)
+        feature_importance_df = pd.DataFrame({
+            'Feature': ['Total_Trans_Ct', 'Total_Revolving_Bal', 'Total_Relationship_Count', 'Months_Inactive_12_mon', 'Contacts_Count_12_mon', 'Total_Trans_Amt', 'Avg_Utilization_Ratio', 'Months_on_book', 'Credit_Limit', 'Customer_Age'],
             'Importance': [0.35, 0.28, 0.18, 0.15, 0.12, 0.10, 0.08, 0.07, 0.05, 0.04]
         })
-        
-        fig = px.bar(
-            feature_importance.sort_values('Importance', ascending=False),
-            x='Importance',
-            y='Feature',
-            orientation='h',
-            title='Top 10 Features Driving Churn Predictions',
-            color='Importance',
-            color_continuous_scale='Reds'
+        fig_feature_importance = px.bar(
+            feature_importance_df.sort_values('Importance', ascending=False),
+            x='Importance', y='Feature', orientation='h', title='Top 10 Features Driving Churn Predictions (General)',
+            color='Importance', color_continuous_scale='Reds'
         )
-        fig.update_layout(yaxis={'categoryorder':'total ascending'}, title_font_size=18, margin=dict(t=60, l=150))
-        st.plotly_chart(fig, use_container_width=True)
+        fig_feature_importance.update_layout(yaxis={'categoryorder':'total ascending'}, title_font_size=18, margin=dict(t=60, l=150))
+        st.plotly_chart(fig_feature_importance, use_container_width=True)
 
 # Interactive Visualizations page
 elif selected_page == "Interactive Visualizations":
