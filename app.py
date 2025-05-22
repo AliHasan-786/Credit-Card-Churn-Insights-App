@@ -10,72 +10,72 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="Capital One Churn Prediction",
+    page_title="Churn Prediction",
     page_icon="💳",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Define Capital One color palette
-CAPITAL_ONE_COLORS = {
-    'primary': '#004977',  # Capital One blue
-    'secondary': '#D03027',  # Capital One red
-    'accent1': '#6EC4E8',  # Light blue
+# Define a generic color palette
+APP_COLORS = {
+    'primary': '#004977',  # Dark Blue
+    'secondary': '#D03027',  # Red
+    'accent1': '#6EC4E8',  # Light Blue
     'accent2': '#FFB81C',  # Gold
     'accent3': '#4CAF50',  # Green
-    'background': '#FFFFFF',
-    'text': '#212121'
+    'background': '#FFFFFF', # White
+    'text': '#212121'      # Dark Grey
 }
 
 # Custom CSS
-st.markdown("""
+st.markdown(f"""
 <style>
-    .main-header {
-        font-size: 2.5rem;
-        color: #004977;
+    .main-header {{
+        font-size: 2.3rem; /* Reduced font size */
+        color: {APP_COLORS['primary']};
         text-align: center;
-        margin-bottom: 1rem;
-    }
-    .sub-header {
-        font-size: 1.8rem;
-        color: #004977;
+        margin-bottom: 1.2rem; /* Increased margin */
+    }}
+    .sub-header {{
+        font-size: 1.7rem; /* Reduced font size */
+        color: {APP_COLORS['primary']};
         margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
-    .section-header {
-        font-size: 1.5rem;
-        color: #004977;
+        margin-bottom: 1.2rem; /* Increased margin */
+    }}
+    .section-header {{
+        font-size: 1.4rem; /* Reduced font size */
+        color: {APP_COLORS['primary']};
         margin-top: 1.5rem;
-        margin-bottom: 0.8rem;
-    }
-    .highlight-text {
-        color: #D03027;
+        margin-bottom: 1rem; /* Increased margin */
+    }}
+    .highlight-text {{
+        color: {APP_COLORS['secondary']};
         font-weight: bold;
-    }
-    .info-box {
+    }}
+    .info-box {{
         background-color: #f0f8ff;
         padding: 1rem;
         border-radius: 0.5rem;
-        border-left: 5px solid #004977;
+        border-left: 5px solid {APP_COLORS['primary']};
         margin-bottom: 1rem;
-    }
-    .insight-box {
+    }}
+    .insight-box {{
         background-color: #fff8e1;
         padding: 1rem;
         border-radius: 0.5rem;
-        border-left: 5px solid #FFB81C;
+        border-left: 5px solid {APP_COLORS['accent2']};
         margin-bottom: 1rem;
-    }
-    .stButton>button {
-        background-color: #D03027;
+    }}
+    .stButton>button {{
+        background-color: {APP_COLORS['secondary']};
         color: white;
         font-weight: bold;
         border: none;
         padding: 0.5rem 1rem;
         border-radius: 0.3rem;
-    }
-    .stButton>button:hover {
-        background-color: #b02020;
+    }}
+    .stButton>button:hover {{
+        background-color: #b02020; /* Darker red for hover */
     }
     .footer {
         text-align: center;
@@ -113,7 +113,6 @@ def load_data():
 df = load_data()
 
 # Sidebar navigation
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Capital_One_logo.svg/1200px-Capital_One_logo.svg.png", width=200)
 st.sidebar.markdown("## Navigation")
 
 pages = ["Introduction", "Dataset Exploration", "Methodology", "AI Insights", "Interactive Visualizations"]
@@ -121,13 +120,13 @@ selected_page = st.sidebar.radio("Go to", pages)
 
 # Introduction page
 if selected_page == "Introduction":
-    st.markdown("<h1 class='main-header'>Capital One Customer Churn Prediction</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'>Customer Churn Prediction Project</h1>", unsafe_allow_html=True)
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
         st.markdown("<div class='info-box'>", unsafe_allow_html=True)
-        st.markdown("### Welcome to the Capital One Churn Prediction Project")
+        st.markdown("### Welcome to the Customer Churn Prediction Project")
         st.markdown("""
         This interactive application demonstrates how data science and artificial intelligence 
         can help identify and retain customers who are at risk of closing their credit card accounts.
@@ -146,21 +145,22 @@ if selected_page == "Introduction":
             df, 
             names='Attrition_Flag', 
             color='Attrition_Flag',
-            color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                               'Attrited Customer': CAPITAL_ONE_COLORS['secondary']},
+            color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                               'Attrited Customer': APP_COLORS['secondary']},
             title='Customer Attrition Distribution'
         )
         fig.update_layout(
             font=dict(family="Arial", size=12),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=50, b=20),
+            margin=dict(l=20, r=20, t=60, b=20), /* Increased top margin */
+            title_font_size=18
         )
         st.plotly_chart(fig, use_container_width=True)
     
     st.markdown("<h2 class='sub-header'>Problem Statement</h2>", unsafe_allow_html=True)
     
     st.markdown("""
-    Credit card customer churn is a significant challenge for financial institutions like Capital One. 
+    Credit card customer churn is a significant challenge for financial institutions.
     When customers close their accounts, it results in lost revenue and increased acquisition costs to replace them.
     
     This project aims to:
@@ -177,19 +177,19 @@ if selected_page == "Introduction":
     with col1:
         st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
         st.markdown("### Predictive Model")
-        st.markdown("Developed a machine learning model that can identify at-risk customers with high accuracy")
+        st.markdown("Developed a high-accuracy machine learning model using XGBoost, which achieved a ROC AUC score of 0.92. This model is capable of identifying customers at high risk of churning by analyzing their demographic data, account information, and transaction behavior.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     with col2:
         st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
         st.markdown("### Churn Drivers")
-        st.markdown("Identified key factors that influence customer decisions to close their accounts")
+        st.markdown("Identified key factors influencing customer churn, such as low transaction counts, high number of inactive months, and low product holding. Understanding these drivers allows for targeted interventions and proactive customer engagement.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     with col3:
         st.markdown("<div class='insight-box'>", unsafe_allow_html=True)
         st.markdown("### AI-Powered Strategies")
-        st.markdown("Generated personalized retention strategies using advanced AI techniques")
+        st.markdown("Leveraged AI to generate personalized retention strategies. These strategies are tailored to individual customer profiles and provide actionable recommendations, such as targeted offers or proactive support, to reduce churn and improve customer loyalty.")
         st.markdown("</div>", unsafe_allow_html=True)
 
 # Dataset Exploration page
@@ -251,11 +251,12 @@ elif selected_page == "Dataset Exploration":
             df, 
             x=selected_num_feature, 
             color="Attrition_Flag",
-            color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                               'Attrited Customer': CAPITAL_ONE_COLORS['secondary']},
+            color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                               'Attrited Customer': APP_COLORS['secondary']},
             marginal="box",
             title=f"Distribution of {selected_num_feature} by Attrition Status"
         )
+        fig.update_layout(title_font_size=16, margin=dict(t=60, b=40, l=40, r=20))
         st.plotly_chart(fig, use_container_width=True)
     
     with tab2:
@@ -277,11 +278,11 @@ elif selected_page == "Dataset Exploration":
         fig = px.bar(
             cat_counts, 
             barmode='group',
-            color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                               'Attrited Customer': CAPITAL_ONE_COLORS['secondary']},
+            color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                               'Attrited Customer': APP_COLORS['secondary']},
             title=f"Churn Rate by {selected_cat_feature}"
         )
-        fig.update_layout(yaxis_title="Percentage (%)")
+        fig.update_layout(yaxis_title="Percentage (%)", title_font_size=16, margin=dict(t=60, b=40, l=40, r=20))
         st.plotly_chart(fig, use_container_width=True)
     
     with tab3:
@@ -295,7 +296,7 @@ elif selected_page == "Dataset Exploration":
             color_continuous_scale='RdBu_r',
             title="Correlation Heatmap of Numerical Features"
         )
-        fig.update_layout(height=700)
+        fig.update_layout(height=700, margin=dict(t=70, l=100, r=50), title_font_size=18)
         st.plotly_chart(fig, use_container_width=True)
 
 # Methodology page
@@ -338,7 +339,7 @@ elif selected_page == "Methodology":
             title="Churn Rate by Card Category",
             labels={'Churn': 'Churn Rate'}
         )
-        fig.update_layout(yaxis_title="Churn Rate", xaxis_title="Card Category")
+        fig.update_layout(yaxis_title="Churn Rate", xaxis_title="Card Category", margin=dict(t=60), title_font_size=18)
         st.plotly_chart(fig, use_container_width=True)
     
     with tab2:
@@ -363,9 +364,10 @@ elif selected_page == "Methodology":
                 names='Attrition_Flag', 
                 title='Original Class Distribution',
                 color='Attrition_Flag',
-                color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                                   'Attrited Customer': CAPITAL_ONE_COLORS['secondary']}
+                color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                                   'Attrited Customer': APP_COLORS['secondary']}
             )
+            fig.update_layout(margin=dict(t=50, b=50), title_font_size=16)
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
@@ -380,9 +382,10 @@ elif selected_page == "Methodology":
                 values='Count',
                 title='Balanced Class Distribution after SMOTE',
                 color='Class',
-                color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                                   'Attrited Customer': CAPITAL_ONE_COLORS['secondary']}
+                color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                                   'Attrited Customer': APP_COLORS['secondary']}
             )
+            fig.update_layout(margin=dict(t=50, b=50), title_font_size=16)
             st.plotly_chart(fig, use_container_width=True)
     
     with tab3:
@@ -440,6 +443,7 @@ elif selected_page == "Methodology":
             color='Model',
             title="Model Performance Comparison"
         )
+        fig.update_layout(margin=dict(t=60), title_font_size=18)
         st.plotly_chart(fig, use_container_width=True)
     
     with tab5:
@@ -472,6 +476,7 @@ elif selected_page == "Methodology":
                 color_continuous_scale='Blues',
                 title="Confusion Matrix"
             )
+            fig.update_layout(margin=dict(t=60), title_font_size=18)
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
@@ -487,6 +492,7 @@ elif selected_page == "Methodology":
                 type='line', line=dict(dash='dash', width=1),
                 x0=0, x1=1, y0=0, y1=1
             )
+            fig.update_layout(margin=dict(t=60), title_font_size=18)
             st.plotly_chart(fig, use_container_width=True)
 
 # AI Insights page
@@ -592,11 +598,11 @@ elif selected_page == "AI Insights":
                 title = {'text': "Churn Probability"},
                 gauge = {
                     'axis': {'range': [0, 100]},
-                    'bar': {'color': CAPITAL_ONE_COLORS['secondary']},
+                    'bar': {'color': APP_COLORS['secondary']},
                     'steps': [
-                        {'range': [0, 30], 'color': CAPITAL_ONE_COLORS['accent3']},
-                        {'range': [30, 70], 'color': CAPITAL_ONE_COLORS['accent2']},
-                        {'range': [70, 100], 'color': CAPITAL_ONE_COLORS['secondary']}
+                        {'range': [0, 30], 'color': APP_COLORS['accent3']},
+                        {'range': [30, 70], 'color': APP_COLORS['accent2']},
+                        {'range': [70, 100], 'color': APP_COLORS['secondary']}
                     ],
                     'threshold': {
                         'line': {'color': "red", 'width': 4},
@@ -605,7 +611,7 @@ elif selected_page == "AI Insights":
                     }
                 }
             ))
-            fig.update_layout(height=250, margin=dict(l=20, r=20, t=30, b=20))
+            fig.update_layout(height=250, margin=dict(l=20, r=20, t=40, b=20), title_font_size=16)
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
@@ -637,7 +643,7 @@ elif selected_page == "AI Insights":
                - Channel: Mobile app notification and email
             
             4. **Financial Advisory Service** (Priority: Low)
-               - Offer complimentary session with Capital One financial advisor
+               - Offer complimentary session with a financial advisor.
                - Focus on long-term wealth management aligned with her income bracket
                - Timing: 2 weeks after initial interventions
                - Channel: Email invitation with calendar scheduling link
@@ -676,7 +682,7 @@ elif selected_page == "AI Insights":
             color='Importance',
             color_continuous_scale='Reds'
         )
-        fig.update_layout(yaxis={'categoryorder':'total ascending'})
+        fig.update_layout(yaxis={'categoryorder':'total ascending'}, title_font_size=18, margin=dict(t=60, l=150))
         st.plotly_chart(fig, use_container_width=True)
 
 # Interactive Visualizations page
@@ -695,68 +701,79 @@ elif selected_page == "Interactive Visualizations":
     col1, col2, col3 = st.columns(3)
     
     with col1:
+        segment_x_options = ["Card_Category", "Gender", "Income_Category", "Education_Level", "Marital_Status"]
         segment_x = st.selectbox(
             "Primary Segment (X-axis)", 
-            ["Card_Category", "Gender", "Income_Category", "Education_Level", "Marital_Status"]
+            segment_x_options,
+            index=0 # Default to "Card_Category"
         )
     
     with col2:
+        segment_y_options = ["Income_Category", "Card_Category", "Gender", "Education_Level", "Marital_Status"]
         segment_y = st.selectbox(
             "Secondary Segment (Y-axis)", 
-            ["Income_Category", "Card_Category", "Gender", "Education_Level", "Marital_Status"],
-            index=1
+            segment_y_options,
+            index=0 # Default to "Income_Category"
         )
     
     with col3:
+        segment_size_options = ["Customer Count", "Average Credit_Limit", "Average Total_Trans_Amt"]
         segment_size = st.selectbox(
             "Bubble Size", 
-            ["Customer Count", "Average Credit_Limit", "Average Total_Trans_Amt"]
+            segment_size_options,
+            index=0 # Default to "Customer Count"
         )
-    
-    # Prepare data for bubble chart
-    segment_data = df.groupby([segment_x, segment_y]).agg(
-        churn_rate=('Churn', 'mean'),
-        count=('Churn', 'count'),
-        avg_credit_limit=('Credit_Limit', 'mean'),
-        avg_trans_amt=('Total_Trans_Amt', 'mean')
-    ).reset_index()
-    
-    # Map size variable
-    if segment_size == "Customer Count":
-        size_var = "count"
-        size_title = "Customer Count"
-    elif segment_size == "Average Credit_Limit":
-        size_var = "avg_credit_limit"
-        size_title = "Avg Credit Limit"
+
+    # Error handling for duplicate axis selections
+    if segment_x == segment_y:
+        st.info("Please select two different categories for the X and Y axes.")
     else:
-        size_var = "avg_trans_amt"
-        size_title = "Avg Transaction Amount"
-    
-    # Create bubble chart
-    fig = px.scatter(
-        segment_data,
-        x=segment_x,
-        y=segment_y,
-        size=size_var,
-        color="churn_rate",
-        hover_name=segment_x,
-        color_continuous_scale="Reds",
-        size_max=60,
-        hover_data={
-            "churn_rate": ":.1%",
-            "count": True,
-            "avg_credit_limit": ":.0f",
-            "avg_trans_amt": ":.0f"
-        }
-    )
-    
-    fig.update_layout(
-        title=f"Churn Rate by {segment_x} and {segment_y}",
-        coloraxis_colorbar=dict(title="Churn Rate"),
-        height=600
-    )
-    
-    st.plotly_chart(fig, use_container_width=True)
+        # Prepare data for bubble chart
+        segment_data = df.groupby([segment_x, segment_y]).agg(
+            churn_rate=('Churn', 'mean'),
+            count=('Churn', 'count'),
+            avg_credit_limit=('Credit_Limit', 'mean'),
+            avg_trans_amt=('Total_Trans_Amt', 'mean')
+        ).reset_index()
+        
+        # Map size variable
+        if segment_size == "Customer Count":
+            size_var = "count"
+            size_title = "Customer Count"
+        elif segment_size == "Average Credit_Limit":
+            size_var = "avg_credit_limit"
+            size_title = "Avg Credit Limit"
+        else:
+            size_var = "avg_trans_amt"
+            size_title = "Avg Transaction Amount"
+        
+        # Create bubble chart
+        fig = px.scatter(
+            segment_data,
+            x=segment_x,
+            y=segment_y,
+            size=size_var,
+            color="churn_rate",
+            hover_name=segment_x,
+            color_continuous_scale="Reds",
+            size_max=60,
+            hover_data={
+                "churn_rate": ":.1%",
+                "count": True,
+                "avg_credit_limit": ":.0f",
+                "avg_trans_amt": ":.0f"
+            }
+        )
+        
+        fig.update_layout(
+            title=f"Churn Rate by {segment_x} and {segment_y}",
+            coloraxis_colorbar=dict(title="Churn Rate"),
+            height=600,
+            title_font_size=16, 
+            margin=dict(t=70)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
     
     # Churn trends by numerical features
     st.markdown("<h2 class='sub-header'>Churn Trends by Customer Attributes</h2>", unsafe_allow_html=True)
@@ -789,15 +806,15 @@ elif selected_page == "Interactive Visualizations":
         x=x_feature,
         y=y_feature,
         color="Attrition_Flag",
-        color_discrete_map={'Existing Customer': CAPITAL_ONE_COLORS['primary'], 
-                           'Attrited Customer': CAPITAL_ONE_COLORS['secondary']},
+        color_discrete_map={'Existing Customer': APP_COLORS['primary'], 
+                           'Attrited Customer': APP_COLORS['secondary']},
         opacity=0.7,
         marginal_x="histogram",
         marginal_y="histogram",
         title=f"Relationship between {x_feature} and {y_feature} by Attrition Status"
     )
     
-    fig.update_layout(height=700)
+    fig.update_layout(height=700, title_font_size=16, margin=dict(t=70))
     st.plotly_chart(fig, use_container_width=True)
     
     # Churn prediction model performance
@@ -831,7 +848,9 @@ elif selected_page == "Interactive Visualizations":
             xaxis_title='False Positive Rate',
             yaxis_title='True Positive Rate',
             legend=dict(x=0.01, y=0.01, bgcolor='rgba(255,255,255,0.8)'),
-            height=600
+            height=600,
+            title_font_size=18, 
+            margin=dict(t=60, b=40, l=60, r=40)
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -858,10 +877,12 @@ elif selected_page == "Interactive Visualizations":
             xaxis_title='Recall',
             yaxis_title='Precision',
             legend=dict(x=0.01, y=0.01, bgcolor='rgba(255,255,255,0.8)'),
-            height=600
+            height=600,
+            title_font_size=18, 
+            margin=dict(t=60, b=40, l=60, r=40)
         )
         
         st.plotly_chart(fig, use_container_width=True)
 
 # Footer
-st.markdown("<div class='footer'>Capital One Customer Churn Prediction Project | Created for Recruiters</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>Customer Churn Prediction Project | By Ali Hasan</div>", unsafe_allow_html=True)
