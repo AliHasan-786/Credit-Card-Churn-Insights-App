@@ -31,22 +31,22 @@ APP_COLORS = {
 st.markdown(f"""
 <style>
     .main-header {{
-        font-size: 2.3rem; /* Reduced font size */
+        font-size: 2.3rem; 
         color: {APP_COLORS['primary']};
         text-align: center;
-        margin-bottom: 1.2rem; /* Increased margin */
+        margin-bottom: 1.2rem;  
     }}
     .sub-header {{
-        font-size: 1.7rem; /* Reduced font size */
+        font-size: 1.7rem; 
         color: {APP_COLORS['primary']};
         margin-top: 2rem;
-        margin-bottom: 1.2rem; /* Increased margin */
+        margin-bottom: 1.2rem; 
     }}
     .section-header {{
-        font-size: 1.4rem; /* Reduced font size */
+        font-size: 1.4rem; 
         color: {APP_COLORS['primary']};
         margin-top: 1.5rem;
-        margin-bottom: 1rem; /* Increased margin */
+        margin-bottom: 1rem; 
     }}
     .highlight-text {{
         color: {APP_COLORS['secondary']};
@@ -75,7 +75,7 @@ st.markdown(f"""
         border-radius: 0.3rem;
     }}
     .stButton>button:hover {{
-        background-color: #b02020; /* Darker red for hover */
+        background-color: #b02020; 
     }} 
     .footer {{
         text-align: center;
@@ -152,7 +152,7 @@ if selected_page == "Introduction":
         fig.update_layout(
             font=dict(family="Arial", size=12),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=60, b=20), /* Increased top margin */
+            margin=dict(l=20, r=20, t=60, b=20), 
             title_font_size=18
         )
         st.plotly_chart(fig, use_container_width=True)
@@ -585,15 +585,15 @@ elif selected_page == "AI Insights":
             
             fig_gauge = go.Figure(go.Indicator(
                 mode = "gauge+number", value = 75, title = {'text': "Estimated Churn Probability"},
-                gauge = {{
-                    'axis': {{'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"}},
-                    'bar': {{'color': APP_COLORS['secondary']}}, 'bgcolor': "white", 'borderwidth': 2, 'bordercolor': "gray",
+                gauge = {
+                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                    'bar': {'color': APP_COLORS['secondary']}, 'bgcolor': "white", 'borderwidth': 2, 'bordercolor': "gray",
                     'steps': [
-                        {{'range': [0, 30], 'color': APP_COLORS['accent3']}},
-                        {{'range': [30, 70], 'color': APP_COLORS['accent2']}},
+                        {'range': [0, 30], 'color': APP_COLORS['accent3']},
+                        {'range': [30, 70], 'color': APP_COLORS['accent2']},
                     ],
-                    'threshold': {{'line': {{'color': "red", 'width': 4}}, 'thickness': 0.85, 'value': 75}}
-                }}
+                    'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.85, 'value': 75}
+                }
             ))
             fig_gauge.update_layout(height=280, margin=dict(l=30,r=30,t=70,b=30), title_font_size=18, font=dict(color=APP_COLORS['primary']))
             st.plotly_chart(fig_gauge, use_container_width=True)
