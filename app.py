@@ -9,7 +9,7 @@ from plotly.subplots import make_subplots
 import os
 import re
 
-# Set page configuration
+#Set page config
 st.set_page_config(
     page_title="Churn Prediction",
     page_icon="💳",
@@ -17,18 +17,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Define a generic color palette
+#Define a color palette
 APP_COLORS = {
-    'primary': '#004977',  # Dark Blue
-    'secondary': '#D03027',  # Red
-    'accent1': '#6EC4E8',  # Light Blue
-    'accent2': '#FFB81C',  # Gold
-    'accent3': '#4CAF50',  # Green
-    'background': '#FFFFFF', # White
-    'text': '#212121'      # Dark Grey
+    'primary': '#004977',  
+    'secondary': '#D03027', 
+    'accent1': '#6EC4E8',  
+    'accent2': '#FFB81C',  
+    'accent3': '#4CAF50',  
+    'background': '#FFFFFF', 
+    'text': '#212121'      
 }
 
-# ─── AI + MODEL UTILS ──────────────────────────────────────────────────────────
+#AI + MODEL UTILS
 import json, joblib, google.generativeai as genai
 
 
@@ -36,9 +36,10 @@ GEMINI_API_KEY = "YOUR_API_KEY"
 genai.configure(api_key=GEMINI_API_KEY)
 gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 
-# load fitted model + the column list it saw during training
+#load fitted model + the column list it saw during training
 MODEL_PATH        = "xgb_final.pkl"
-MODEL_COLUMNS_JSON = "model_columns.json"   # list dumped from the notebook
+# list dumped from the notebook
+MODEL_COLUMNS_JSON = "model_columns.json"
 try:
     churn_model   = joblib.load(MODEL_PATH)
     model_columns = json.load(open(MODEL_COLUMNS_JSON))
@@ -68,7 +69,7 @@ def predict_prob(one_obs: dict) -> float:
             df_one[col] = 0
     df_one = df_one[model_columns]
     return float(churn_model.predict_proba(df_one)[0, 1])
-# ───────────────────────────────────────────────────────────────────────────────
+
 
 
 
@@ -113,7 +114,7 @@ st.markdown(f"""
     }}
     .stButton>button {{
         background-color: {APP_COLORS['secondary']};
-        color: white;  /* Changed from #212121 to white for better contrast */
+        color: white;  
         font-weight: bold;
         border: none;
         padding: 0.5rem 1rem;
@@ -121,11 +122,11 @@ st.markdown(f"""
     }}
     .stButton>button:hover {{
         background-color: #f5c451; 
-        color: #212121;  /* Ensure text is dark on hover state */
+        color: #212121;  
     }}
     .stButton>button:active {{
         background-color:#e0a800; 
-        color: #212121;  /* Ensure text is dark on active state */
+        color: #212121;  
     }}
     .footer {{
         text-align: center;
