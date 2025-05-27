@@ -17,22 +17,21 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Define a generic color palette
+# Define a color palette
 APP_COLORS = {
-    'primary': '#004977',  # Dark Blue
-    'secondary': '#D03027',  # Red
-    'accent1': '#6EC4E8',  # Light Blue
-    'accent2': '#FFB81C',  # Gold
-    'accent3': '#4CAF50',  # Green
-    'background': '#FFFFFF', # White
-    'text': '#212121'      # Dark Grey
+    'primary': '#004977',  
+    'secondary': '#D03027',  
+    'accent1': '#6EC4E8',  
+    'accent2': '#FFB81C',  
+    'accent3': '#4CAF50',  
+    'background': '#FFFFFF', 
+    'text': '#212121'      
 }
 
 # ─── AI + MODEL UTILS ──────────────────────────────────────────────────────────
 import json, joblib, google.generativeai as genai
 
-# Directly embed the API key in the code as requested
-GEMINI_API_KEY = "AIzaSyDZn-6LZqxkkssrNUpfr0RIX2mLyqCobus"
+GEMINI_API_KEY = "YOUR_API_KEY"
 genai.configure(api_key=GEMINI_API_KEY)
 gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 
